@@ -1,0 +1,10 @@
+__pycache__
+.idea
+.vscode
+.coverage
+junit_report.xml
+
+*.egg-info
+dist
+bin
+.buildozer
