@@ -1,13 +1,13 @@
 [app]
 
 # (str) Title of your application
-title = My Application
+title = My AI Camera
 
 # (str) Package name
-package.name = myapp
+package.name = myaicamera
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.test
+package.domain = org.myaicamera
 
 # (str) Source code where the main.py live
 source.dir = photo
@@ -36,8 +36,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,xcamera,opencv
-#,cv2
+requirements = python3,kivy,opencv
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
