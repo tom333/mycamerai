@@ -41,7 +41,7 @@ build-buildozer: # Construction de l'image de dev
 	docker build -t myaicamera-buildozer -f Dockerfile .
 
 deploy: build-buildozer
-	docker run --volume ~/.buildozer:/home/user/.buildozer --volume ${CURDIR}:/home/user/hostcwd myaicamera-buildozer android debug deploy run logcat
+	docker run -t --volume ~/.buildozer:/home/user/.buildozer --volume ${CURDIR}:/home/user/hostcwd myaicamera-buildozer android debug deploy run logcat
 
 init-buildozer: build-buildozer
 #	docker volume create buildozer_home
