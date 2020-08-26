@@ -7,6 +7,7 @@
 
 ## Prerequisite
 - docker or podman
+- make
 
 # dev
 make deploy
