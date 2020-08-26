@@ -15,7 +15,7 @@ Logger.setLevel(logging.TRACE)
 
 
 class DefaultScreen(Screen):
-    layout = BoxLayout(orientation='vertical', padding=10)
+    layout = BoxLayout(orientation="vertical", padding=10)
 
     def finalize_widgets(self):
         # self.layout.add_widget(self.top_buttons)
@@ -44,19 +44,19 @@ class AppScreenManager(ScreenManager):
     def display_settings(self):
         settings = App.get_running_app().get_settings_screen()
         manager = self.manager
-        if not manager.has_screen('Settings'):
-            s = Screen(name='Settings')
+        if not manager.has_screen("Settings"):
+            s = Screen(name="Settings")
             s.add_widget(settings)
             manager.add_widget(s)
-        manager.switch_and_set_back('Settings')
+        manager.switch_and_set_back("Settings")
 
     def close_settings(self, *args):
-        print('Closing settings')
-        if self.manager.current == 'Settings':
+        print("Closing settings")
+        if self.manager.current == "Settings":
             self.manager.go_back()
 
     def switch_and_set_back(self, newcurrent):
-        print('Asked to switch and set back')
+        print("Asked to switch and set back")
         self.back_screen_name = self.current
         self.switch_to(newcurrent)
 
@@ -73,10 +73,10 @@ class PhotoApp(App):
     face_detector = None
 
     def build_config(self, config):
-        config.setdefaults('Label', {'Content': "Default label text"})
+        config.setdefaults("Label", {"Content": "Default label text"})
 
     def build_settings(self, settings):
-        jsondata = '''[
+        jsondata = """[
             {
                 "type": "title",
                 "title": "Configuration"
@@ -89,7 +89,7 @@ class PhotoApp(App):
                 "default": ":true"
             }
         ]
-        '''
+        """
         settings.add_json_panel("Configuration", self.config, data=jsondata)
 
     def build(self):
@@ -102,24 +102,24 @@ class PhotoApp(App):
 
     @property
     def camera(self):
-        return self.root.screens[0].ids['camera']
+        return self.root.screens[0].ids["camera"]
 
     @property
     def image(self):
-        return self.root.screens[1].ids['image']
+        return self.root.screens[1].ids["image"]
 
     @property
     def commentaire(self):
-        return self.root.screens[1].ids['commentaire']
+        return self.root.screens[1].ids["commentaire"]
 
     def envoyer_photo(self):
         print("envoyer photo")
         self.manager.switch_to("Capture")
 
     def _on_picture_taken(self):
-        print('#######################################################################################')
+        print("#######################################################################################")
         print("_on_picture_taken")
-        print('#######################################################################################')
+        print("#######################################################################################")
         filename = "/storage/emulated/0/DCIM/IMG_{}.png".format(time.strftime("%Y%m%d_%H%M%S"))
         self.camera.export_to_png(filename)
         self.face_detector.detect_face(filename)
@@ -128,6 +128,5 @@ class PhotoApp(App):
         self.manager.switch_to("Send")
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     PhotoApp().run()

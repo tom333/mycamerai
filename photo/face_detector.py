@@ -7,7 +7,7 @@ from kivy.uix.popup import Popup
 import numpy as np
 
 
-class FaceDetector():
+class FaceDetector:
     MODULE_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
     model = None
 
@@ -24,9 +24,9 @@ class FaceDetector():
         return os.path.join(self.path, "./app/data/res10_300x300_ssd_iter_140000_fp16.caffemodel")
 
     def detect_face(self, filename):
-        print('#######################################################################################')
+        print("#######################################################################################")
         print("detection de visage")
-        print('#######################################################################################')
+        print("#######################################################################################")
 
         print("analyse de l'image %s " % self.path)
         image = cv2.imread(filename)
@@ -56,15 +56,14 @@ class FaceDetector():
                 # convert to integers
                 start_x, start_y, end_x, end_y = box.astype(np.int)
                 # get the face image
-                face = image[start_y: end_y, start_x: end_x]
+                face = image[start_y:end_y, start_x:end_x]
                 # apply gaussian blur to this face
                 face = cv2.GaussianBlur(face, (kernel_width, kernel_height), 0)
                 # put the blurred face into the original image
-                image[start_y: end_y, start_x: end_x] = face
+                image[start_y:end_y, start_x:end_x] = face
         if cpt > 0:
             self.commentaire.text = "%s visage(s) détécté(s) et flouté(s)" % cpt
             print("avant ecriture fichier")
-            popup = Popup(title='Visages détéctés', content=Label(text="%s visage(s) détécté(s) et flouté(s)" % cpt), size_hint=(.7, .2))
+            popup = Popup(title="Visages détéctés", content=Label(text="%s visage(s) détécté(s) et flouté(s)" % cpt), size_hint=(0.7, 0.2))
             popup.open()
             cv2.imwrite(filename, image)
-
