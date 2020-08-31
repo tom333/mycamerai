@@ -1,6 +1,5 @@
 import logging
-import time
-from android.runnable import run_on_ui_thread
+
 from jnius import autoclass
 from kivy.app import App
 from kivy.core.window import Window
@@ -13,8 +12,8 @@ from screens import Capture, Send
 
 Logger.setLevel(logging.TRACE)
 
-AndroidActivityInfo = autoclass('android.content.pm.ActivityInfo')
-AndroidPythonActivity = autoclass('org.kivy.android.PythonActivity')
+AndroidActivityInfo = autoclass("android.content.pm.ActivityInfo")
+AndroidPythonActivity = autoclass("org.kivy.android.PythonActivity")
 
 
 class PhotoApp(App):
@@ -61,8 +60,6 @@ class PhotoApp(App):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-
-
     @property
     def camera(self):
         return self.root.screens[0].ids["camera"]
@@ -78,27 +75,6 @@ class PhotoApp(App):
     def envoyer_photo(self):
         Logger.debug("envoyer photo")
         self.manager.switch_to("Capture")
-
-    @run_on_ui_thread
-    def set_orientation_landscape(self):
-        Logger.debug("set_orientation_landscape")
-        activity = AndroidPythonActivity.mActivity
-        activity.setRequestedOrientation(
-            AndroidActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
-
-    @run_on_ui_thread
-    def set_orientation_portrait(self):
-        Logger.debug("set_orientation_portrait")
-        activity = AndroidPythonActivity.mActivity
-        activity.setRequestedOrientation(
-            AndroidActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-
-    @run_on_ui_thread
-    def set_orientation_all(self):
-        Logger.debug("set_orientation_all")
-        activity = AndroidPythonActivity.mActivity
-        activity.setRequestedOrientation(
-            AndroidActivityInfo.SCREEN_ORIENTATION_SENSOR)
 
 
 if __name__ == "__main__":

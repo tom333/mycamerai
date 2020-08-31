@@ -1,28 +1,14 @@
+__all__ = "CameraOpenCV"
 
-
-__all__ = ('CameraOpenCV')
-
-import time
-
-import cv2
-import kivy
 import numpy as np
+from jnius import autoclass
 from kivy.app import App
-from kivy.core.window import Window
 from kivy.graphics import Color
 from kivy.graphics import Rectangle
 from kivy.logger import Logger
-from kivy.clock import Clock
-from kivy.graphics.texture import Texture
-from kivy.core.camera import CameraBase
-from kivy.properties import ObservableList
-from kivy.uix.camera import Camera
-from kivy.uix.image import Image
-
-from jnius import autoclass
 from kivy_garden.xcamera import XCamera
 
-Environment = autoclass('android.os.Environment')
+Environment = autoclass("android.os.Environment")
 
 
 class CameraOpenCV(XCamera):
@@ -40,7 +26,7 @@ class CameraOpenCV(XCamera):
         detected_faces = App.get_running_app().face_detector.detect_faces(img)
         # Logger.debug(detected_faces)
         Logger.debug("test  %s %s vs %s  => %s, %s" % (width, height, self.size, self.center, self.pos))
-        #self.canvas.before.clear()
+        # self.canvas.before.clear()
         for (x, y, w, h) in detected_faces:
             Logger.debug("#######################################################################################")
             Logger.debug("visage détécté %s, %s => %s %s" % (x, y, w, h))
@@ -51,7 +37,7 @@ class CameraOpenCV(XCamera):
                 new_x = x * self.size[0] / height
                 Logger.debug("new pos %s : %s" % (new_y, new_x))
                 Color(1, 0, 0, 0.5, mode="rgba")
-                Rectangle(size=(300, 300), pos=(300,0)) # new_y, new_x
+                Rectangle(size=(300, 300), pos=(300, 0))  # new_y, new_x
 
     def _setup(self):
         """
@@ -72,7 +58,7 @@ class CameraOpenCV(XCamera):
         super(CameraOpenCV, self).__init__(**kwargs)
         Logger.debug("__init__")
 
-    def picture_taken(self,  obj, filename):
+    def picture_taken(self, obj, filename):
         Logger.debug("#######################################################################################")
         Logger.debug("_on_picture_taken %s => %s" % (obj, filename))
         Logger.debug("#######################################################################################")

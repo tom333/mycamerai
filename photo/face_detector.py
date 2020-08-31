@@ -1,19 +1,15 @@
 import os
 
 import cv2
-from cv2.dnn import readNetFromCaffe
-from kivy import Logger
-from kivy.uix.label import Label
-from kivy.uix.popup import Popup
 import numpy as np
+from kivy import Logger
 
 
 class FaceDetector:
-
     def __init__(self, path):
         self.path = path
         Logger.debug("FaceDetector.__init__()")
-        #self.model = readNetFromCaffe(self.prototxt_path, self.model_path)
+        # self.model = readNetFromCaffe(self.prototxt_path, self.model_path)
         self.detector = cv2.CascadeClassifier(os.path.join(self.path, "./app/data/haarcascade_frontalface_default.xml"))
 
     @property
@@ -32,7 +28,7 @@ class FaceDetector:
         # Logger.debug("#######################################################################################")
         # Logger.debug("detection de visage")
         # Logger.debug("#######################################################################################")
-        #gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        # gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         faces = self.detector.detectMultiScale(image, scaleFactor=1.01, minNeighbors=3)
 
         # get width and height of the image
@@ -78,4 +74,3 @@ class FaceDetector:
         face = cv2.GaussianBlur(face, (kernel_width, kernel_height), 0)
         # put the blurred face into the original image
         image[start_y:end_y, start_x:end_x] = face
-
