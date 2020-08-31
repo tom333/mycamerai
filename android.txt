@@ -1,0 +1,4 @@
+title=My AI Camera
+author=Thomas Guyader
+orientation=landscape
+requirements=kivy, opencv, pyjnius, xcamera

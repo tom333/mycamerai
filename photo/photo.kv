@@ -1,4 +1,6 @@
 #:kivy 1.0.9
+#:import CameraOpenCV camera_widget
+#:import XCamera kivy_garden.xcamera.XCamera
 
 <Capture>
     name: "Capture"
@@ -8,6 +10,7 @@
         size: root.size
         BoxLayout:
             orientation: 'horizontal'
+            size_hint_y: None
             height: '48dp'
             Label:
                 text: 'Envoi de photo à la PNord'
@@ -20,14 +23,15 @@
                 on_press: app.open_settings()
         Widget:
             id: proxy
-            Camera:
+            CameraOpenCV:
                 id: camera
-                resolution: (1280,720)
-                play: True
+                index:0
                 allow_stretch: True
                 keep_ratio: True
                 center: self.size and proxy.center
                 size: proxy.height, proxy.width
+                play: True
+                on_picture_taken: self.picture_taken(*args)
                 canvas.before:
                     PushMatrix:
                     Rotate:
@@ -35,11 +39,12 @@
                         origin: self.center
                 canvas.after:
                     PopMatrix:
-        Button:
-            text: 'Prendre photo'
-            on_press: app._on_picture_taken()
-            size_hint_y: None
-            height: '48dp'
+
+#        Button:
+#            text: 'Prendre photo'
+#            #on_press: app.picture_taken(*args)
+#            size_hint_y: None
+#            height: '48dp'
 
 <Send>:
     name: "Send"
