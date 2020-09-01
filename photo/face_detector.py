@@ -9,7 +9,7 @@ class FaceDetector:
     def __init__(self, path):
         self.path = path
         Logger.debug("FaceDetector.__init__()")
-        self.scale_factor = 4
+        self.scale_factor = 1
         self.detector = cv2.CascadeClassifier(os.path.join(self.path, "./app/data/haarcascade_frontalface_default.xml"))
 
     def detect_face_from_files(self, filename):

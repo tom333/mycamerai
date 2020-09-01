@@ -1,6 +1,5 @@
 import logging
 
-from jnius import autoclass
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.logger import Logger
@@ -11,9 +10,6 @@ from screen_manager import AppScreenManager
 from screens import Capture, Send
 
 Logger.setLevel(logging.TRACE)
-
-AndroidActivityInfo = autoclass("android.content.pm.ActivityInfo")
-AndroidPythonActivity = autoclass("org.kivy.android.PythonActivity")
 
 
 class PhotoApp(App):
