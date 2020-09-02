@@ -53,8 +53,13 @@ init-buildozer: build-buildozer
 build-ide: # Construction de l'image contenant vscode
 	docker build -t myaicamera-ide -f Dockerfile.ide .
 
+init_emulator:
+	~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --install "system-images;android-28;default;x86"
+	echo "no" | ~/.buildozer/android/platform/android-sdk/tools/bin/avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-28;default;x86" --tag "default" --abi "x86"
+	~/.buildozer/android/platform/android-sdk/emulator/emulator @generic_10
+
 run-ide: build-ide # Lancement de Vscode
-	docker run -it -p 127.0.0.1:8080:8080 -v "${CURDIR}:/home/coder/project" myaicamera-ide --auth none &
+	docker run --env_file=.env -it -p 127.0.0.1:8080:8080 -v "${CURDIR}:/home/coder/project" myaicamera-ide --auth none &
 	xdg-open "http://localhost:8080/?folder=vscode-remote%3A%2F%2Flocalhost%3A8080%2Fhome%2Fcoder%2Fproject" &
 
 
