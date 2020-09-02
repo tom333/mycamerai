@@ -1,7 +1,6 @@
 import logging
 
-from kivy.app import App
-from kivy.core.window import Window
+from kivymd.app import MDApp
 from kivy.logger import Logger
 from kivy.properties import ObjectProperty
 
@@ -12,7 +11,8 @@ from screens import Capture, Send
 Logger.setLevel(logging.TRACE)
 
 
-class PhotoApp(App):
+class PhotoApp(MDApp):
+
     manager = ObjectProperty(None)
 
     config = None
@@ -43,30 +43,12 @@ class PhotoApp(App):
         self.manager.add_widget(Capture(name="Capture"))
         self.manager.add_widget(Send(name="Send"))
         self.face_detector = FaceDetector(self.user_data_dir)
-        Window.bind(on_rotate=self._on_flip_screen)
+        self.theme_cls.theme_style = "Dark"
 
         return self.manager
 
-    def _on_flip_screen(self, *args):
-        Logger.debug("flipping %s " % list(args))
-
-    def on_start(self):
-        pass
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-    @property
-    def camera(self):
-        return self.root.screens[0].ids["camera"]
-
-    @property
-    def image(self):
-        return self.root.screens[1].ids["image"]
-
-    @property
-    def commentaire(self):
-        return self.root.screens[1].ids["commentaire"]
 
     def envoyer_photo(self):
         Logger.debug("envoyer photo")

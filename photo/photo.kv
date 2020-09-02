@@ -3,50 +3,19 @@
 
 <Capture>
     name: "Capture"
-    BoxLayout:
+    MDBoxLayout:
         orientation: 'vertical'
-        padding: 10
-        size: root.size
+        MDToolbar:
+            title: "My CamerAI"
+#           right_action_items: [["dots-vertical", lambda x: self.root.callback()], ["clock", lambda x: self.root.callback()]]
 
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint_y: None
-            height: '48dp'
-            Label:
-                text: 'Envoi de photo à la PNord'
-                size_hint_y: None
-                height: '48dp'
-            Button:
-                text: 'Options'
-                size_hint_y: None
-                height: '48dp'
-                on_press: app.open_settings()
-        RelativeLayout:
-        #Widget:
+        CameraOpenCV:
+            id: camera
+            index:0
             allow_stretch: True
-            id: proxy
-            CameraOpenCV:
-                id: camera
-                index:0
-                allow_stretch: True
-                keep_ratio: True
-                center: self.size and proxy.center
-                size: proxy.height, proxy.width
-                play: True
-                on_picture_taken: self.picture_taken(*args)
-                canvas.before:
-                    PushMatrix:
-                    Rotate:
-                        angle: -90
-                        origin: self.center
-                canvas.after:
-                    PopMatrix:
-
-#        Button:
-#            text: 'Prendre photo'
-#            #on_press: app.picture_taken(*args)
-#            size_hint_y: None
-#            height: '48dp'
+            keep_ratio: True
+            play: True
+            on_picture_taken: self.picture_taken(*args)
 
 <Send>:
     name: "Send"
