@@ -1,4 +1,5 @@
 import os
+import time
 
 import cv2
 import numpy as np
@@ -9,7 +10,7 @@ class FaceDetector:
     def __init__(self, path):
         self.path = path
         Logger.debug("FaceDetector.__init__()")
-        self.scale_factor = 1
+        self.scale_factor = 2
         self.detector = cv2.CascadeClassifier(os.path.join(self.path, "./app/data/haarcascade_frontalface_default.xml"))
 
     def detect_face_from_files(self, filename):
@@ -21,8 +22,11 @@ class FaceDetector:
         # Logger.debug("detection de visage")
         # Logger.debug("#######################################################################################")
         gray = cv2.cvtColor(cv2.resize(image, (0, 0), fx=1.0 / self.scale_factor, fy=1.0 / self.scale_factor), cv2.COLOR_RGB2GRAY)
-        faces = self.detector.detectMultiScale(gray, scaleFactor=1.01, minNeighbors=3, flags=cv2.CASCADE_SCALE_IMAGE) * self.scale_factor
-
+        faces = self.detector.detectMultiScale(gray, scaleFactor=1.05, minNeighbors=3, flags=cv2.CASCADE_SCALE_IMAGE) * self.scale_factor
+        for (x, y, w, h) in faces:
+            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        filename = "/storage/emulated/0/DCIM/IMG_{}.png".format(time.strftime("%Y%m%d_%H%M%S"))
+        cv2.imwrite(filename, image)
         return faces
 
     def blur_image(self, h, i, image, kernel_height, kernel_width, output, w):
