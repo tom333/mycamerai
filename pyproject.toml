@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "my_ai_camera"
+name = "mycamerai"
 version = "0.1.0"
 description = "Camera app with AI inside"
 authors = ["Thomas Guyader <laboitatom@gmail.com>"]
@@ -8,7 +8,6 @@ authors = ["Thomas Guyader <laboitatom@gmail.com>"]
 python = "^3.6"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.3.5"
 pytest-cov = "^2.8.1"
 coverage = {extras = ["toml"], version = "^5.0.3"}
 flake8 = "^3.7.9"
@@ -17,14 +16,15 @@ isort = "^4.3.21"
 
 [tool.coverage.run]
 branch = true
-source = "photo"
+source = "mycamerai"
 
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
 
-[pytest]
-testpaths = "tests"
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
 log_cli = true
 log_cli_level = "DEBUG"
 

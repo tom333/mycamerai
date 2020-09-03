@@ -1,16 +1,16 @@
 [app]
 
 # (str) Title of your application
-title = My AI Camera
+title = My CamerAI
 
 # (str) Package name
-package.name = myaicamera
+package.name = mycamerai
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.myaicamera
+package.domain = org.mycamerai
 
 # (str) Source code where the main.py live
-source.dir = photo
+source.dir = mycamerai
 
 # (list) Source files to include (let empty to include all the files)
 source.include_exts = py,png,jpg,kv,atlas,xml,prototxt,caffemodel
