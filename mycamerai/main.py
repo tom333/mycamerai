@@ -51,7 +51,7 @@ class PhotoApp(MDApp):
         super().__init__(**kwargs)
 
     def envoyer_photo(self):
-        Logger.debug("envoyer photo")
+        Logger.debug("envoyer mycamerai")
         self.manager.switch_to("Capture")
 
 

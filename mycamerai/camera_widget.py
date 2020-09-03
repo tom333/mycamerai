@@ -24,7 +24,7 @@ class CameraOpenCV(XCamera):
         height, width = self.texture.height, self.texture.width
         img = np.frombuffer(self.texture.pixels, np.uint8)
         img = img.reshape(height, width, 4)
-        img = cv2.flip(img, 0)
+        img = np.flipud(img)
         Logger.debug("avant detection visage")
         detected_faces = App.get_running_app().face_detector.detect_faces(img)
         # Logger.debug(detected_faces)
