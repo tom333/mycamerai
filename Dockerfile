@@ -32,14 +32,6 @@ ENV HOME_DIR="/home/${USER}"
 ENV WORK_DIR="${HOME_DIR}/hostcwd" \
     PATH="${HOME_DIR}/.local/bin:${PATH}"
 
-ENV http_proxy="http://proxy-web.proxy-dmz.gnc:3128"
-ENV https_proxy="http://proxy-web.proxy-dmz.gnc:3128"
-ENV ftp_proxy="http://proxy-web.proxy-dmz.gnc:3128"
-ENV no_proxy="localhost,127.0.0.1,127.0.1.1,gitlab-infra.ref.gnc,.recif.nc,.appli-gestion.nc,.gnc,/var/run/docker.sock,10.10.106.0/24,.valid-gouv.nc,.dmz.nc,jira.gouv.nc,jira-info.gouv.nc,webnotes.gouv.nc,stats-new.gouv.nc,guichet-entreprises.nc,192.168.62.38"
-
-
-RUN echo "Acquire::http::Proxy \"http://proxy-web.proxy-dmz.gnc:3128\";" > /etc/apt/apt.conf.d/proxy
-RUN echo "Acquire::https::Proxy \"http://proxy-web.proxy-dmz.gnc:3128\";" >> /etc/apt/apt.conf.d/proxy
 
 RUN apt update -qq > /dev/null \
     && DEBIAN_FRONTEND=noninteractive apt install -qq --yes --no-install-recommends \
