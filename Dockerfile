@@ -125,8 +125,6 @@ RUN yes 2>/dev/null | /opt/android-sdk/tools/bin/sdkmanager --sdk_root=/opt/andr
 RUN /opt/android-sdk/tools/bin/sdkmanager --sdk_root=/opt/android-sdk "build-tools;30.0.2"
 RUN /opt/android-sdk/tools/bin/sdkmanager --sdk_root=/opt/android-sdk "platforms;android-28"
 
-RUN pip3 install --user --upgrade
-
 #Install de apache ANT
 ARG ANT_VERSION=1.9.4
 WORKDIR /opt
