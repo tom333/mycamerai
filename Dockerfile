@@ -88,10 +88,10 @@ RUN apt update -qq > /dev/null \
 #RUN echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 #
 #USER ${USER}
-WORKDIR ${WORK_DIR}
+
 
 # installs buildozer and dependencies
-RUN pip3 install --user --upgrade Cython==0.29.19 wheel pip virtualenv buildozer
+RUN pip3 install --user --upgrade Cython==0.29.19 wheel pip virtualenv buildozer toml colorama jinja2 python-for-android
 ENV PATH="/root/.local/bin:$PATH"
 
 #Install du NDK
@@ -115,10 +115,24 @@ ENV PATH ${PATH}:${ANDROID_NDK_HOME}
 #Install du sdk
 ARG ANDROID_SDK_VERSION=6514223
 ENV ANDROID_SDK_ROOT /opt/android-sdk
-RUN mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools && \
+RUN mkdir -p ${ANDROID_SDK_ROOT} && \
     wget -q https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip && \
     unzip *tools*linux*.zip -d ${ANDROID_SDK_ROOT} && \
     rm *tools*linux*.zip
 
+WORKDIR ${ANDROID_SDK_ROOT}
+RUN yes 2>/dev/null | /opt/android-sdk/tools/bin/sdkmanager --sdk_root=/opt/android-sdk --licenses
+RUN /opt/android-sdk/tools/bin/sdkmanager --sdk_root=/opt/android-sdk "build-tools;30.0.2"
+RUN /opt/android-sdk/tools/bin/sdkmanager --sdk_root=/opt/android-sdk "platforms;android-28"
 
+RUN pip3 install --user --upgrade
+
+#Install de apache ANT
+ARG ANT_VERSION=1.9.4
+WORKDIR /opt
+RUN wget -q http://archive.apache.org/dist/ant/binaries/apache-ant-${ANT_VERSION}-bin.tar.gz && \
+    tar xzf apache-ant-*.tar.gz && \
+    rm xzf apache-ant-*.tar.gz
+
+WORKDIR ${WORK_DIR}
 ENTRYPOINT ["buildozer"]

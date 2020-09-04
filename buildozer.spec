@@ -112,7 +112,7 @@ android.ndk_path =/opt/android-ndk
 android.sdk_path =/opt/android-sdk
 
 # (str) ANT directory (if empty, it will be automatically downloaded.)
-#android.ant_path =
+android.ant_path =/opt/apache-ant-1.9.4
 
 # (bool) If True, then skip trying to update the Android sdk
 # This can be useful to avoid excess Internet downloads or save time
