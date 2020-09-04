@@ -32,6 +32,10 @@ ENV HOME_DIR="/home/${USER}"
 ENV WORK_DIR="${HOME_DIR}/hostcwd" \
     PATH="${HOME_DIR}/.local/bin:${PATH}"
 
+ENV http_proxy="http://proxy-web.proxy-dmz.gnc:3128"
+ENV https_proxy="http://proxy-web.proxy-dmz.gnc:3128"
+ENV ftp_proxy="http://proxy-web.proxy-dmz.gnc:3128"
+ENV no_proxy="localhost,127.0.0.1,127.0.1.1,gitlab-infra.ref.gnc,.recif.nc,.appli-gestion.nc,.gnc,/var/run/docker.sock,10.10.106.0/24,.valid-gouv.nc,.dmz.nc,jira.gouv.nc,jira-info.gouv.nc,webnotes.gouv.nc,stats-new.gouv.nc,guichet-entreprises.nc,192.168.62.38"
 
 
 RUN echo "Acquire::http::Proxy \"http://proxy-web.proxy-dmz.gnc:3128\";" > /etc/apt/apt.conf.d/proxy
@@ -78,15 +82,43 @@ RUN apt update -qq > /dev/null \
     zlib1g-dev
 
 # prepares non root env
-RUN useradd --create-home --shell /bin/bash ${USER}
-# with sudo access and no password
-RUN usermod -append --groups sudo ${USER}
-RUN echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-USER ${USER}
+#RUN useradd --create-home --shell /bin/bash ${USER}
+## with sudo access and no password
+#RUN usermod -append --groups sudo ${USER}
+#RUN echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+#
+#USER ${USER}
 WORKDIR ${WORK_DIR}
 
 # installs buildozer and dependencies
-RUN pip3 install --user --upgrade Cython wheel pip virtualenv buildozer #==0.29.19
+RUN pip3 install --user --upgrade Cython==0.29.19 wheel pip virtualenv buildozer
+ENV PATH="/root/.local/bin:$PATH"
+
+#Install du NDK
+ENV ANDROID_NDK_HOME /opt/android-ndk
+ENV ANDROID_NDK_VERSION r19c
+
+RUN mkdir /opt/android-ndk-tmp && \
+    cd /opt/android-ndk-tmp && \
+    wget -q https://dl.google.com/android/repository/android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip && \
+# uncompress
+    unzip -q android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip && \
+# move to its final location
+    mv ./android-ndk-${ANDROID_NDK_VERSION} ${ANDROID_NDK_HOME} && \
+# remove temp dir
+    cd ${ANDROID_NDK_HOME} && \
+    rm -rf /opt/android-ndk-tmp
+
+# add to PATH
+ENV PATH ${PATH}:${ANDROID_NDK_HOME}
+
+#Install du sdk
+ARG ANDROID_SDK_VERSION=6514223
+ENV ANDROID_SDK_ROOT /opt/android-sdk
+RUN mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools && \
+    wget -q https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip && \
+    unzip *tools*linux*.zip -d ${ANDROID_SDK_ROOT} && \
+    rm *tools*linux*.zip
+
 
 ENTRYPOINT ["buildozer"]
