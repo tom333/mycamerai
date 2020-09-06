@@ -1,31 +1,5 @@
 # Dockerfile for providing buildozer
-#
-# Build with:
-# docker build --tag=kivy/buildozer .
-#
-# In order to give the container access to your current working directory
-# it must be mounted using the --volume option.
-# Run with (e.g. `buildozer --version`):
-# docker run \
-#   --volume "$HOME/.buildozer":/home/user/.buildozer \
-#   --volume "$PWD":/home/user/hostcwd \
-#   kivy/buildozer --version
-#
-# Or for interactive shell:
-# docker run --interactive --tty --rm \
-#   --volume "$HOME/.buildozer":/home/user/.buildozer \
-#   --volume "$PWD":/home/user/hostcwd \
-#   --entrypoint /bin/bash \
-#   kivy/buildozer
-#
-# If you get a `PermissionError` on `/home/user/.buildozer/cache`,
-# try updating the permissions from the host with:
-# sudo chown $USER -R ~/.buildozer
-# Or simply recreate the directory from the host with:
-# rm -rf ~/.buildozer && mkdir ~/.buildozer
-
-FROM python:3.8-slim
-
+FROM python:3.7-slim
 
 ENV USER="user"
 ENV HOME_DIR="/home/${USER}"
@@ -60,6 +34,7 @@ RUN apt update -qq > /dev/null \
     cmake \
     gettext \
     git \
+    libc6 \
     libffi-dev \
     libltdl-dev \
     libssl-dev \
@@ -67,24 +42,15 @@ RUN apt update -qq > /dev/null \
     adoptopenjdk-8-hotspot \
     patch \
     pkg-config \
-    python3-all-dev \
     sudo \
     unzip \
     zip \
     zlib1g-dev
 
-# prepares non root env
-#RUN useradd --create-home --shell /bin/bash ${USER}
-## with sudo access and no password
-#RUN usermod -append --groups sudo ${USER}
-#RUN echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-#
-#USER ${USER}
-
-
-# installs buildozer and dependencies
-RUN pip3 install --user --upgrade Cython==0.29.19 wheel pip virtualenv buildozer toml colorama jinja2 python-for-android
-ENV PATH="/root/.local/bin:$PATH"
+    #python3-all \
+    #python3-all-dev \
+    #python3-pip \
+    #python3-setuptools \
 
 #Install du NDK
 ENV ANDROID_NDK_HOME /opt/android-ndk
@@ -122,7 +88,26 @@ ARG ANT_VERSION=1.9.4
 WORKDIR /opt
 RUN wget -q http://archive.apache.org/dist/ant/binaries/apache-ant-${ANT_VERSION}-bin.tar.gz && \
     tar xzf apache-ant-*.tar.gz && \
-    rm xzf apache-ant-*.tar.gz
+    rm apache-ant-*.tar.gz
+
+ENV PYTHONHOME=/usr/local/bin/python
+RUN python -c 'import sys; print(sys.path)'
+
+RUN python -m pip install -- upgrade pip
+
+# prepares non root env
+RUN useradd --create-home --shell /bin/bash ${USER}
+## with sudo access and no password
+RUN usermod -append --groups sudo ${USER}
+RUN echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+#
+USER ${USER}
+
+
+# installs buildozer and dependencies
+
+RUN pip3 install --user --upgrade Cython==0.29.19 wheel pip virtualenv buildozer toml colorama jinja2 python-for-android
+ENV PATH="/root/.local/bin:$PATH"
 
 WORKDIR ${WORK_DIR}
 ENTRYPOINT ["buildozer"]
