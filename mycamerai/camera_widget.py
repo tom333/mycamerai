@@ -1,17 +1,17 @@
 __all__ = "CameraOpenCV"
 
 import numpy as np
-from jnius import autoclass
 from kivy.app import App
 from kivy.graphics import Color
 from kivy.graphics import Rectangle
 from kivy.logger import Logger
 from kivy_garden.xcamera import XCamera
 
-Environment = autoclass("android.os.Environment")
-
 
 class CameraOpenCV(XCamera):
+
+    faces = []
+
     def on_camera_ready(self):
         Logger.debug("on_camera_ready %s " % str(self.center))
         if self._camera is not None:
@@ -22,22 +22,29 @@ class CameraOpenCV(XCamera):
         height, width = self.texture.height, self.texture.width
         img = np.frombuffer(self.texture.pixels, np.uint8)
         img = img.reshape(height, width, 4)
+        img = np.flipud(img)
         Logger.debug("avant detection visage")
         detected_faces = App.get_running_app().face_detector.detect_faces(img)
         # Logger.debug(detected_faces)
-        Logger.debug("test  %s %s vs %s  => %s, %s" % (width, height, self.size, self.center, self.pos))
+        Logger.debug("test texture width=%s, texture height=%s vs size=%s => center=%s, pos=%s" % (width, height, self.size, self.center, self.pos))
+
         # self.canvas.before.clear()
+        # if len(self.faces) > 0 :
+        #     self.canvas.children.remove(self.faces)
+        # self.faces = []
         for (x, y, w, h) in detected_faces:
             Logger.debug("#######################################################################################")
             Logger.debug("visage détécté %s, %s => %s %s" % (x, y, w, h))
             Logger.debug("#######################################################################################")
 
-            with self.canvas.after:
+            with self.canvas:
                 new_y = y * self.size[1] / width
                 new_x = x * self.size[0] / height
-                Logger.debug("new pos %s : %s" % (new_y, new_x))
+                Logger.debug("new pos %s => %s" % (new_y, new_x))
+                Logger.debug(self.to_local(x, y))
                 Color(1, 0, 0, 0.5, mode="rgba")
-                Rectangle(size=(300, 300), pos=(300, 0))  # new_y, new_x
+                Rectangle(size=(300, 300), pos=self.to_local(x, y))
+                # self.faces.append()  # new_y, new_x)
 
     def _setup(self):
         """
@@ -62,7 +69,7 @@ class CameraOpenCV(XCamera):
         Logger.debug("#######################################################################################")
         Logger.debug("_on_picture_taken %s => %s" % (obj, filename))
         Logger.debug("#######################################################################################")
-        # filename = "/storage/emulated/0/DCIM/IMG_{}.png".format(time.strftime("%Y%m%d_%H%M%S"))
+        # filename = "/storage/emulated/0/DCIM/Camera/IMG_{}.png".format(time.strftime("%Y%m%d_%H%M%S"))
         # self.camera.export_to_png(filename)
         # self.face_detector.detect_face(filename)
         # self.image.source = filename
