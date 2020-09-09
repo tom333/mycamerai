@@ -45,6 +45,7 @@ deploy: build-buildozer
 					--privileged \
 					--volume /dev/bus/usb:/dev/bus/usb \
 					--volume buildozer_home:/root/.buildozer \
+					--volume gradle_cache:/root/.gradle \
 					--volume /home/moi/.android:/root/.android \
 					--volume ${CURDIR}:/home/user/hostcwd \
 					mycamerai-buildozer android debug deploy run logcat
