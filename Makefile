@@ -41,17 +41,13 @@ build-buildozer: # Construction de l'image de dev
 	podman build -t mycamerai-buildozer -f Dockerfile .
 
 deploy: build-buildozer
-	podman run -it --volume buildozer_home:/home/user/.buildozer --volume ${CURDIR}:/home/user/hostcwd mycamerai-buildozer android update debug deploy run logcat
-#
-init-buildozer: build-buildozer
-	#podman volume create buildozer_home
-#	podman run --interactive --tty --rm --volume ${CURDIR}:/home/user/hostcwd mycamerai-buildozer android update
-#	podman run --interactive --tty --rm -u 1000 -v buildozer_home:/home/user/.buildozer --entrypoint "sudo" mycamerai-buildozer chown -R 1000 /home/user/.buildozer
-	podman exec -it mycamerai-buildozer ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager "build-tools;28.0.3"
-	#podman run --interactive --tty --rm -u 1000 -v buildozer_home:/home/user/.buildozer --entrypoint "~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager \"build-tools;28.0.0\" " mycamerai-buildozer
-#	podman run --interactive --tty --rm -u 1000 -v buildozer_home:/home/user/.buildozer  --volume ${CURDIR}:/home/user/hostcwd mycamerai-buildozer android update
-#	podman run --interactive --tty --rm --mount type=volume,source=buildozer_home,target=/home/user/.buildozer  --volume ${CURDIR}:/home/user/hostcwd mycamerai-buildozer android update
-#  --volume "$HOME/.buildozer":/home/user/.buildozer \
+	podman run -it \
+					--privileged \
+					--volume /dev/bus/usb:/dev/bus/usb \
+					--volume buildozer_home:/root/.buildozer \
+					--volume /home/moi/.android:/root/.android \
+					--volume ${CURDIR}:/home/user/hostcwd \
+					mycamerai-buildozer android debug deploy run logcat
 
 build-ide: # Construction de l'image contenant vscode
 	podman build -t mycamerai-ide -f Dockerfile.ide .
