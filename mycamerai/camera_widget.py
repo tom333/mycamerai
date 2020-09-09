@@ -1,8 +1,6 @@
 __all__ = "CameraOpenCV"
 
-import cv2
 import numpy as np
-from jnius import autoclass
 from kivy.app import App
 from kivy.graphics import Color
 from kivy.graphics import Rectangle
