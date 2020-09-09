@@ -88,16 +88,16 @@ fullscreen = 0
 android.permissions = CAMERA,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,ACCESS_FINE_LOCATION
 
 # (int) Target Android API, should be as high as possible.
-android.api = 28
+android.api = 30
 
 # (int) Minimum API your APK will support.
 #android.minapi = 21
 
 # (int) Android SDK version to use
-#android.sdk = 31
+# android.sdk = 28
 
 # (str) Android NDK version to use
-#android.ndk = 19b
+#android.ndk = 19c
 
 # (int) Android NDK API to use. This is the minimum API your app will support, it should usually match android.minapi.
 #android.ndk_api = 21
@@ -117,7 +117,7 @@ android.ant_path =/opt/apache-ant-1.9.4
 # (bool) If True, then skip trying to update the Android sdk
 # This can be useful to avoid excess Internet downloads or save time
 # when an update is due and you just want to test/build your package
-android.skip_update = False
+android.skip_update = True
 
 # (bool) If True, then automatically accept SDK license
 # agreements. This is intended for automation only. If set to False,
