@@ -13,7 +13,7 @@ from screens import Capture, Send
 Logger.setLevel(logging.TRACE)
 
 
-class PhotoApp(MDApp):
+class MyCamerAIApp(MDApp):
 
     manager = ObjectProperty(None)
 
@@ -40,9 +40,7 @@ class PhotoApp(MDApp):
             else:
                 print("callback. Some permissions refused.")
 
-        request_permissions([Permission.CAMERA,
-                             Permission.READ_EXTERNAL_STORAGE,
-                             Permission.WRITE_EXTERNAL_STORAGE], callback)
+        request_permissions([Permission.CAMERA, Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE], callback)
 
     def build_config(self, config):
         config.setdefaults("Label", {"Content": "Default label text"})
@@ -85,4 +83,4 @@ class PhotoApp(MDApp):
 
 
 if __name__ == "__main__":
-    PhotoApp().run()
+    MyCamerAIApp().run()
