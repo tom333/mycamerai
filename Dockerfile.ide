@@ -1,0 +1,5 @@
+FROM codercom/code-server
+
+
+RUN code-server --install-extension ms-python.python VisualStudioExptTeam.vscodeintellicode
+
