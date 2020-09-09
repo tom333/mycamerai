@@ -6,7 +6,6 @@ ENV HOME_DIR="/home/${USER}"
 ENV WORK_DIR="${HOME_DIR}/hostcwd" \
     PATH="${HOME_DIR}/.local/bin:${PATH}"
 
-
 RUN apt update -qq > /dev/null \
     && DEBIAN_FRONTEND=noninteractive apt install -qq --yes --no-install-recommends \
     locales && \
@@ -15,7 +14,7 @@ ENV LANG="fr_FR.UTF-8" \
     LANGUAGE="fr_FR.UTF-8" \
     LC_ALL="fr_FR.UTF-8"
 
-# bug cf https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=863199#23
+# Workaround for bug https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=863199#23
 RUN mkdir -p /usr/share/man/man1
 
 RUN DEBIAN_FRONTEND=noninteractive  apt install wget gnupg software-properties-common --yes --no-install-recommends
@@ -25,8 +24,9 @@ RUN wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | a
 RUN add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
 
 # system requirements to build most of the recipes
-RUN apt update -qq > /dev/null \
-    && DEBIAN_FRONTEND=noninteractive apt install -qq --yes --no-install-recommends \
+RUN apt update && DEBIAN_FRONTEND=noninteractive apt install --yes --no-install-recommends adoptopenjdk-8-hotspot
+
+RUN DEBIAN_FRONTEND=noninteractive apt install --yes --no-install-recommends \
     autoconf \
     automake \
     build-essential \
@@ -39,18 +39,14 @@ RUN apt update -qq > /dev/null \
     libltdl-dev \
     libssl-dev \
     libtool \
-    adoptopenjdk-8-hotspot \
     patch \
     pkg-config \
     sudo \
     unzip \
+    usbutils \
     zip \
     zlib1g-dev
 
-    #python3-all \
-    #python3-all-dev \
-    #python3-pip \
-    #python3-setuptools \
 
 #Install du NDK
 ENV ANDROID_NDK_HOME /opt/android-ndk
@@ -70,8 +66,15 @@ RUN mkdir /opt/android-ndk-tmp && \
 # add to PATH
 ENV PATH ${PATH}:${ANDROID_NDK_HOME}
 
+#Install de apache ANT
+ARG ANT_VERSION=1.9.4
+WORKDIR /opt
+RUN wget -q http://archive.apache.org/dist/ant/binaries/apache-ant-${ANT_VERSION}-bin.tar.gz && \
+    tar xzf apache-ant-*.tar.gz && \
+    rm apache-ant-*.tar.gz
+
 #Install du sdk
-ARG ANDROID_SDK_VERSION=6514223
+ARG ANDROID_SDK_VERSION=6609375
 ENV ANDROID_SDK_ROOT /opt/android-sdk
 RUN mkdir -p ${ANDROID_SDK_ROOT} && \
     wget -q https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip && \
@@ -80,34 +83,21 @@ RUN mkdir -p ${ANDROID_SDK_ROOT} && \
 
 WORKDIR ${ANDROID_SDK_ROOT}
 RUN yes 2>/dev/null | /opt/android-sdk/tools/bin/sdkmanager --sdk_root=/opt/android-sdk --licenses
+
+# Workaround for https://github.com/kivy/buildozer/issues/1144
+RUN touch ~/.android/repositories.cfg
+RUN /opt/android-sdk/tools/bin/sdkmanager --sdk_root=/opt/android-sdk "tools"
 RUN /opt/android-sdk/tools/bin/sdkmanager --sdk_root=/opt/android-sdk "build-tools;30.0.2"
-RUN /opt/android-sdk/tools/bin/sdkmanager --sdk_root=/opt/android-sdk "platforms;android-28"
-
-#Install de apache ANT
-ARG ANT_VERSION=1.9.4
-WORKDIR /opt
-RUN wget -q http://archive.apache.org/dist/ant/binaries/apache-ant-${ANT_VERSION}-bin.tar.gz && \
-    tar xzf apache-ant-*.tar.gz && \
-    rm apache-ant-*.tar.gz
-
-ENV PYTHONHOME=/usr/local/bin/python
-RUN python -c 'import sys; print(sys.path)'
-
-RUN python -m pip install -- upgrade pip
-
-# prepares non root env
-RUN useradd --create-home --shell /bin/bash ${USER}
-## with sudo access and no password
-RUN usermod -append --groups sudo ${USER}
-RUN echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-#
-USER ${USER}
-
+RUN /opt/android-sdk/tools/bin/sdkmanager --sdk_root=/opt/android-sdk "platforms;android-30"
+RUN /opt/android-sdk/tools/bin/sdkmanager --sdk_root=/opt/android-sdk "platform-tools"
+RUN /opt/android-sdk/tools/bin/sdkmanager --sdk_root=/opt/android-sdk "patcher;v4"
+RUN /opt/android-sdk/tools/bin/sdkmanager --sdk_root=/opt/android-sdk "emulator"
 
 # installs buildozer and dependencies
-
-RUN pip3 install --user --upgrade Cython==0.29.19 wheel pip virtualenv buildozer toml colorama jinja2 python-for-android
+RUN pip3 install --upgrade Cython wheel pip virtualenv buildozer toml colorama jinja2 python-for-android kivy
 ENV PATH="/root/.local/bin:$PATH"
 
 WORKDIR ${WORK_DIR}
+RUN rm -rf ~/hostcwd/.buildozer && mkdir -p ~/hostcwd/.buildozer
+
 ENTRYPOINT ["buildozer"]
