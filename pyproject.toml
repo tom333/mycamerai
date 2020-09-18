@@ -6,6 +6,12 @@ authors = ["Thomas Guyader <laboitatom@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
+android-tool = "^1.1.2"
+kivy = "^1.11.1"
+kivymd = "^0.104.1"
+xcamera = "^2020.613"
+pyjnius = "^1.3.0"
+plyer = "^1.4.3"
 
 [tool.poetry.dev-dependencies]
 pytest-cov = "^2.8.1"
@@ -18,15 +24,15 @@ isort = "^4.3.21"
 branch = true
 source = "mycamerai"
 
-[build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
-
 [tool.pytest.ini_options]
 minversion = "6.0"
 testpaths = ["tests"]
 log_cli = true
 log_cli_level = "DEBUG"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
 
 [isort]
 line_length=200
