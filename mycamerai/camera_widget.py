@@ -7,7 +7,7 @@ from kivy.graphics import Color
 from kivy.graphics import Rectangle
 from kivy.logger import Logger
 from kivy_garden.xcamera import XCamera
-
+from kivy.core.window import Window
 
 class CameraOpenCV(XCamera):
     faces = []
@@ -22,10 +22,11 @@ class CameraOpenCV(XCamera):
         height, width = self.texture.height, self.texture.width
         img = np.frombuffer(self.texture.pixels, np.uint8)
         img = img.reshape(height, width, 4)
-        img = cv2.resize(img, None, fx=2.5, fy=2.5)
-        # img = np.flipud(img)
+        img = np.flipud(img)
+        factor = Window.height / self.resolution[1]
+        img = cv2.resize(img, None, fx=factor, fy=factor)
         if self.faces_detection_active:
-            Logger.debug("avant detection visage")
+            #Logger.debug("avant detection visage")
             detected_faces = App.get_running_app().face_detector.detect_faces(img)
             for c in self.faces:
                 self.canvas.remove(c)
@@ -34,7 +35,8 @@ class CameraOpenCV(XCamera):
                 Logger.debug("visage détécté %s, %s => %s %s" % (x, y, w, h))
                 with self.canvas:
                     Color(1, 0, 0, 0.8, mode="rgba")
-                    r = Rectangle(size=(h, -w), pos=(x, 600-y))
+                    # TODO: remove this magic numbers
+                    r = Rectangle(size=(h, w), pos=(x+200, y+75))
                     self.faces.append(r)
 
     def _setup(self):
