@@ -18,8 +18,9 @@
             theme_text_color: "Custom"
             text_color: (1, 1, 0, 1) if self.parent.faces_detection_active == True else (0,0,1,1)
             on_press: self.parent.switch_face_detection(self)
-<Send>:
-    name: "Send"
+
+<Editor>:
+    name: "Editor"
     BoxLayout:
         orientation: 'vertical'
         padding: 10
@@ -49,10 +50,3 @@
             size_hint_y: None
             height: '48dp'
 
-<MyPopup@Popup>:
-    text: "Visages détéctés"
-    Label:
-        id: message
-    Button:
-        text: 'Ok'
-        on_release: root.dismiss()
