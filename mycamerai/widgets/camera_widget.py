@@ -1,7 +1,5 @@
 __all__ = "CameraOpenCV"
 
-import os
-
 import cv2
 import numpy as np
 
@@ -14,8 +12,6 @@ from kivy.core.window import Window
 
 
 class CameraOpenCV(XCamera):
-    faces = []
-    faces_detection_active = True
     directory = "/storage/emulated/0/DCIM/"
 
     def on_camera_ready(self):
@@ -45,13 +41,3 @@ class CameraOpenCV(XCamera):
                         # TODO: remove this magic numbers
                         r = Rectangle(size=(h, w), pos=(x + 200, y + 75))
                         self.faces.append(r)
-
-    def picture_taken(self, obj, filename):
-        Logger.debug("_on_picture_taken %s => %s" % (obj, filename))
-        App.get_running_app().manager.switch_to("Editor")
-        App.get_running_app().manager.current_screen.source = os.path.join(self.directory, filename)
-
-    def switch_face_detection(self, *args):
-        self.faces_detection_active = not self.faces_detection_active
-        Logger.debug("switch_face_detection %s" % self.faces_detection_active)
-        args[0].text_color = (1, 1, 0, 1) if self.faces_detection_active else (0, 0, 1, 1)
