@@ -18,41 +18,26 @@
             theme_text_color: "Custom"
             text_color: (1, 1, 0, 1) if self.parent.faces_detection_active == True else (0,0,1,1)
             on_press: self.parent.switch_face_detection(self)
-<Send>:
-    name: "Send"
-    BoxLayout:
-        orientation: 'vertical'
-        padding: 10
-        size: root.size
-        Label:
-            text: 'Envoi de photo à la PNord'
-            size_hint_y: None
-            height: '48dp'
 
-        Widget:
-            id: proxy
-            Image:
-                id: image
-                size: self.texture_size
-                allow_stretch: True
-                keep_ratio: True
-                center: self.size and proxy.center
-                size: proxy.height, proxy.width
+<Editor>:
+    name: "Editor"
+    AsyncImage:
+        id: image
+        allow_stretch: True
+        keep_ratio: True
+        source: self.parent.source
+        MDIconButton:
+            icon: "account-off-outline"
+            id: anonymous_icon
+            pos: root.width * 0.1, root.height*0.8
+            user_font_size: (dp(96), dp (96))
+            theme_text_color: "Primary"
+            on_press: root.removing_people_enable()
 
-        TextInput:
-            id: commentaire
-            size_hint_y: None
-            height: '48dp'
-        Button:
-            text: 'Envoyer photo'
-            on_press: app.envoyer_photo()
-            size_hint_y: None
-            height: '48dp'
-
-<MyPopup@Popup>:
-    text: "Visages détéctés"
-    Label:
-        id: message
-    Button:
-        text: 'Ok'
-        on_release: root.dismiss()
+        MDIconButton:
+            icon: "camera-outline"
+            id: go_back_to_capture
+            pos: root.width * 0.9, root.height*0.8
+            user_font_size: (dp(96), dp (96))
+            theme_text_color: "Primary"
+            on_press: root.go_back_to_capture_screen()
