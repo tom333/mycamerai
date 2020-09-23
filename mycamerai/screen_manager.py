@@ -1,16 +1,22 @@
 from kivy import Logger
 from kivy.app import App
 from kivy.uix.screenmanager import Screen, ScreenManager
+from kivymd.uix.screen import MDScreen
+
+
+class SelfRegisterScreen(MDScreen):
+    pass
+    # def __init__(self, *args, **kws):
+    #     screen = MDScreen(*args, **kws)
+    #     App.get_running_app().manager.add_widget(screen)
 
 
 class AppScreenManager(ScreenManager):
 
     back_screen_name = None
 
-    # def __init__(self):
-    #
-
-    def switch_to(self, name):
+    def switch_to(self, name, **kwargs):
+        Logger.debug("Asked to switch to %s " % name)
         self.current = name
 
     def display_settings(self):

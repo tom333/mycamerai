@@ -1,16 +1,11 @@
 from kivy import Logger
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.screen import MDScreen
+from kivy.app import App
+from kivy.properties import StringProperty
+
+from screen_manager import SelfRegisterScreen
 
 
-# class DefaultScreen(MDScreen):
-#     layout = MDBoxLayout(orientation="vertical", padding=10)
-
-#     def finalize_widgets(self):
-#         self.add_widget(self.layout)
-
-
-class Capture(MDScreen):
+class Capture(SelfRegisterScreen):
     def display_settings(self):
         self.manager.display_settings()
 
@@ -18,5 +13,11 @@ class Capture(MDScreen):
         Logger.debug("callback")
 
 
-class Editor(MDScreen):
-    pass
+class Editor(SelfRegisterScreen):
+    source = StringProperty("")
+
+    def go_back_to_capture_screen(self):
+        App.get_running_app().manager.switch_to("Capture")
+
+    def removing_people_enable(self, instance):
+        Logger.debug("removing_people_enable %s " % instance)
