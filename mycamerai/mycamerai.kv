@@ -17,7 +17,7 @@
             user_font_size: (dp(96), dp (96))
             theme_text_color: "Custom"
             text_color: (1, 1, 0, 1) if root.faces_detection_active == True else (0,0,1,1)
-            on_press: self.parent.switch_face_detection(self)
+            on_press: root.switch_face_detection(self)
 
 <Editor>:
     name: "Editor"
