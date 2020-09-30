@@ -1,19 +1,10 @@
 from kivy import Logger
 from kivy.app import App
 from kivy.properties import StringProperty
-
-from screen_manager import SelfRegisterScreen
-
-
-class Capture(SelfRegisterScreen):
-    def display_settings(self):
-        self.manager.display_settings()
-
-    def callback(self):
-        Logger.debug("callback")
+from kivymd.uix.screen import MDScreen
 
 
-class Editor(SelfRegisterScreen):
+class Editor(MDScreen):
     source = StringProperty("")
 
     def go_back_to_capture_screen(self):
