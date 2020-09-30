@@ -6,8 +6,9 @@ from kivy.properties import ObjectProperty
 from kivymd.app import MDApp
 
 from face_detector import FaceDetector
-from screen_manager import AppScreenManager
-from screens import Capture, Editor
+from screens.capture import Capture
+from screens.editor import Editor
+from screens.screen_manager import AppScreenManager
 
 Logger.setLevel(logging.DEBUG)
 
