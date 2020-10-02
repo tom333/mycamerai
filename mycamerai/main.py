@@ -1,4 +1,5 @@
 import logging
+import os
 
 from kivy import platform
 from kivy.logger import Logger
@@ -50,7 +51,7 @@ class MyCamerAIApp(MDApp):
         self.manager = AppScreenManager()
         self.manager.add_widget(Capture(name="Capture"))
         self.manager.add_widget(Editor(name="Editor"))
-        self.face_detector = FaceDetector(self.user_data_dir)
+        self.face_detector = FaceDetector(os.path.join(self.user_data_dir, "app"))
         self.theme_cls.theme_style = "Dark"
 
         return self.manager
