@@ -5,4 +5,4 @@ install:
     - pip install poetry
     - poetry install
 script:
-  - pytest
+  - poetry run pytest -c pyproject.toml -s --log-cli-level=10
