@@ -1,9 +1,19 @@
 from kivy import Logger
 from kivy.app import App
+from kivy.core.window import Window
+from kivy.modules import inspector
 from kivy.uix.screenmanager import Screen, ScreenManager
+
+from screens.editor import Editor
 
 
 class AppScreenManager(ScreenManager):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # self.add_widget(Capture(name="Capture"))
+        editor = Editor(name="Editor")
+        inspector.create_inspector(Window, editor)
+        self.add_widget(editor)
 
     back_screen_name = None
 

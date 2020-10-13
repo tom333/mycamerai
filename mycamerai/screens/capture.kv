@@ -1,0 +1,19 @@
+#:import CameraOpenCV widgets.camera_widget
+
+<Capture>
+    name: "Capture"
+    CameraOpenCV:
+        id: camera
+        index:0
+        allow_stretch: True
+        keep_ratio: True
+        play: True
+        on_picture_taken: root.picture_taken(*args)
+        MDIconButton:
+            icon: "guy-fawkes-mask"
+            id: anonymous_icon
+            pos: root.width * 0.1, root.height*0.8
+            user_font_size: (dp(96), dp (96))
+            theme_text_color: "Custom"
+            text_color: (1, 1, 0, 1) if root.faces_detection_active == True else (0,0,1,1)
+            on_press: root.switch_face_detection(self)

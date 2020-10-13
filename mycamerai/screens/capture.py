@@ -1,15 +1,18 @@
 import os
 
-from kivy import Logger
+from kivy import Logger, platform
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.lang import Builder
 from kivy.properties import BooleanProperty
 from kivymd.uix.screen import MDScreen
 
 import cv2
 import numpy as np
-from android.storage import primary_external_storage_path
+
+if platform == "android":
+    from android.storage import primary_external_storage_path
 
 from kivy.graphics import Color
 from kivy.graphics import Rectangle
@@ -20,6 +23,7 @@ class Capture(MDScreen):
     directory = "/storage/emulated/0/DCIM/"
 
     def __init__(self, **kw):
+        Builder.load_file("screens/capture.kv")
         super().__init__(**kw)
         self.faces = []
         self.event_callback = Clock.schedule_interval(self.detect_face, 1 / 2.0)
