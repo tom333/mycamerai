@@ -18,7 +18,7 @@ pytest-cov = "^2.8.1"
 coverage = {extras = ["toml"], version = "^5.0.3"}
 flake8 = "^3.7.9"
 black = {version = "^19.10b0", allow-prereleases = true}
-isort = "^4.3.21"
+isort = "^5.6.4"
 
 [tool.coverage.run]
 branch = true
