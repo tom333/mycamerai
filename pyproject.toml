@@ -11,7 +11,7 @@ kivy = "^1.11.1"
 kivymd = "^0.104.1"
 xcamera = "^2020.613"
 pyjnius = "^1.3.0"
-plyer = "^1.4.3"
+plyer = "^2.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest-cov = "^2.8.1"
